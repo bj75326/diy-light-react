@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>React Test</title>
+<script type="text/javascript">
+(()=>{
+
+    class ReactDOMTextComponent{
+        constructor(text){
+            this._currentElement = text;
+            this.rootNodeID = null;
+        }
+
+        mountComponent(rootNodeID){
+            this.rootNodeID = rootNodeID;
+            return '<span data-reactid="' + rootNodeID + '">' + this._currentElement + '</span>';
+        }
+    }
+
+    const instantiateReactComponent = node =>{
+        if(typeof node === 'string' || typeof node === 'number'){
+            return new ReactDOMTextComponent(node);
+        }
+    };
+
+    let React = {
+        nextReactRootIndex: 0,
+        render(element, container){
+            let componentInstance = instantiateReactComponent(element);
+            let markup = componentInstance.mountComponent(this.nextReactRootIndex++);
+
+            container.innerHTML = markup;
+
+        }
+    };
+
+    window.React = React;
+})();
+</script>
+</head>
+<body>
+<div id="container"></div>
+<script type="text/javascript">
+    React.render('Hello World', document.getElementById("container"));
+</script>
+</body>
+</html>
